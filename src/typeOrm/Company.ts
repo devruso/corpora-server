@@ -15,6 +15,6 @@ export class Company {
   })
   name: string;
 
-  @ManyToOne(() => User, user => user.companies)
+  @ManyToOne(() => User, user => user.companies, {nullable: false})
   user: User;
 }
