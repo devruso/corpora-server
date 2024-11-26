@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CompanyModule } from './company/company.module';
+import { UserModule } from './user/user.module';
 import entities from './typeOrm';
 import createDatabase from './database-init';
 
@@ -28,6 +29,7 @@ import createDatabase from './database-init';
       }),
     }),
     CompanyModule,
+    UserModule,
   ],
 })
 export class AppModule {}
