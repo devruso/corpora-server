@@ -26,6 +26,6 @@ export class User {
     })
     password: string;
 
-    @ManyToOne(() => User, user => user.companies)
+    @ManyToOne(() => Company, company => company.user)
     companies: Company[];
 }
