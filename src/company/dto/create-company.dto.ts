@@ -1,9 +1,6 @@
 import { IsInt, IsPositive, IsString, Length } from "class-validator";
 
 export class CreateCompanyDto {
-    @IsInt({always: true})
-    @IsPositive()
-    readonly id: number;
     @IsString()
     readonly name: string;
     @IsString()
