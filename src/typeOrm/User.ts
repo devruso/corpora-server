@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Company } from "./Company";
 
 
@@ -26,6 +26,6 @@ export class User {
     })
     password: string;
 
-    @ManyToOne(() => Company, company => company.user)
+    @OneToMany(() => Company, company => company.user)
     companies: Company[];
 }
