@@ -9,6 +9,8 @@ import { GoogleStrategy } from 'src/strategies/google.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from './jwt/jwt.config';
 import { UserModule } from 'src/user/user.module';
+import { UserService } from 'src/user/user.service';
+import { LocalStrategy } from 'src/strategies/local.strategy';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]),
@@ -17,6 +19,6 @@ import { UserModule } from 'src/user/user.module';
   UserModule
 ],
   controllers: [AuthController],
-  providers: [AuthService, GoogleStrategy],
+  providers: [AuthService, GoogleStrategy, UserService, LocalStrategy],
 })
 export class AuthModule {}
