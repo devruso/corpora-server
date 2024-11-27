@@ -1,6 +1,7 @@
 import { Controller, Get, HttpCode, HttpStatus, Post, Req, Request, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { GoogleAuthGuard } from './guard/google-auth/google-auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -8,11 +9,10 @@ export class AuthController {
 
 
   @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Request() req){
-    const validateUser = this.authService.validateUser(req.body.email, req.body.password);
-    if(!validateUser) return {message: 'Invalid credentials'};
-    const token = this.authService.login((await validateUser).id);
+    const token = this.authService.login(req.user.id)
     return {id: req.user.id, token}
   }
 
