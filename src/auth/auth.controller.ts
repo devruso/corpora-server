@@ -10,7 +10,9 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('login')
   async login(@Request() req){
-    const token = this.authService.login(req.user.id)
+    const validateUser = this.authService.validateUser(req.body.email, req.body.password);
+    if(!validateUser) return {message: 'Invalid credentials'};
+    const token = this.authService.login((await validateUser).id);
     return {id: req.user.id, token}
   }
 
