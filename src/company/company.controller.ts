@@ -1,9 +1,11 @@
-import { Body, Controller, Delete, Get, Headers, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UsePipes, ValidationPipe } from '@nestjs/common';
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { CompanyService } from './company.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Company } from 'src/typeOrm/Company';
 import { Repository } from 'typeorm';
+import { PaginationDTO } from 'src/dto/pagination.dto';
+import { take } from 'rxjs';
 
 @Controller('company')
 export class CompanyController {
@@ -15,8 +17,8 @@ export class CompanyController {
       ) {}
     
   @Get()
-  findAll() {
-    return this.companyService.findAll();
+  findAll(@Query()paginationDTO:PaginationDTO) {
+    return this.companyService.findAll(paginationDTO);
   }
 
   @Get(':id')

@@ -5,6 +5,8 @@ import { Company } from 'src/typeOrm/Company'; // Certifique-se de que o caminho
 import { CreateCompanyDto } from './dto/create-company.dto';
 import { UpdateCompanyDto } from './dto/update-company';
 import { User } from 'src/typeOrm/User';
+import { PaginationDTO } from 'src/dto/pagination.dto';
+import { DEFAULT_PAGE_SIZE } from 'src/utils/constants';
 
 @Injectable()
 export class CompanyService {
@@ -15,8 +17,12 @@ export class CompanyService {
     private userRepository: Repository<User>,
   ) {}
 
-  findAll(): Promise<Company[]> {
-    return this.companyRepository.find({ relations: ['user'] });
+  findAll(paginationDTO: PaginationDTO): Promise<Company[]> {
+    return this.companyRepository.find({ 
+      relations: ['user'],
+      skip: paginationDTO.skip,
+      take: paginationDTO.limit ?? DEFAULT_PAGE_SIZE,
+    });
   }
 
   findOne(id: number): Promise<Company> {
