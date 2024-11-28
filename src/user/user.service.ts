@@ -12,14 +12,19 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
-  findAll(): Promise<User[]> {
-    return this.userRepository.find();
+  async updateHashedRefreshToken(userId: number, hashedRefreshToken: string) {
+    return await this.userRepository.update({id: userId}, {hashedRefreshToken:hashedRefreshToken})
+  }
+
+  async findAll(): Promise<User[]> {
+    return this.userRepository.find({ relations: ['companies'] });
   }
 
   findOne(id: number): Promise<User> {
     return this.userRepository.findOne({
        where: { id },
-       select: ['username', 'email'], 
+       relations: ['companies'],
+       select: ["id",'username', 'email',"companies", 'hashedRefreshToken', 'role'], 
       });
   }
 
@@ -31,7 +36,7 @@ export class UserService {
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     await this.userRepository.update(id, updateUserDto);
-    return this.userRepository.findOne({ where: { id } });
+    return this.userRepository.findOne({ where: { id }, relations: ['companies'] });
   }
 
   async remove(id: number): Promise<void> {
@@ -39,6 +44,6 @@ export class UserService {
   }
 
   async findByEmail(email: string): Promise<User> {
-    return this.userRepository.findOne({ where: { email } });
+    return this.userRepository.findOne({ where: { email }, relations: ['companies'] });
   }
 }
