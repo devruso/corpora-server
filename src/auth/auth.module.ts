@@ -12,15 +12,18 @@ import { UserModule } from 'src/user/user.module';
 import { UserService } from 'src/user/user.service';
 import { LocalStrategy } from 'src/strategies/local.strategy';
 import { JwtStrategy } from 'src/strategies/jwt.strategy';
+import refreshJwtConfig from './jwt/refresh-jwt.config';
+import { RefreshJwtStrategy } from 'src/strategies/refresh-strategy';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]),
   JwtModule.registerAsync(jwtConfig.asProvider()),
   ConfigModule.forFeature(googleOauthConfig),
   ConfigModule.forFeature(jwtConfig),
+  ConfigModule.forFeature(refreshJwtConfig),
   UserModule
 ],
   controllers: [AuthController],
-  providers: [AuthService, GoogleStrategy, UserService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, GoogleStrategy, UserService, LocalStrategy, JwtStrategy, RefreshJwtStrategy],
 })
 export class AuthModule {}
