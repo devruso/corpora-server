@@ -16,7 +16,7 @@ export class CompanyService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
-
+  
   findAll(paginationDTO: PaginationDTO): Promise<Company[]> {
     return this.companyRepository.find({ 
       relations: ['user'],
@@ -25,12 +25,46 @@ export class CompanyService {
     });
   }
 
+  findAllByUser(userId: number, paginationDTO: PaginationDTO): Promise<Company[]> {
+    return this.companyRepository.find({
+      where: { user: { id: userId } },
+      relations: ['user'],
+      skip: paginationDTO.skip,
+      take: paginationDTO.limit ?? DEFAULT_PAGE_SIZE,
+      select: {
+        id: true,
+        name: true,
+        phoneNumber: true,
+        cnpj: true,
+        user: {
+          id: true,
+          username: true,
+          email: true,
+        },
+      },
+    });
+  }
+
   findOne(id: number): Promise<Company> {
-    return this.companyRepository.findOne({ where: { id }, relations: ['user'] });
+    return this.companyRepository.findOne({ 
+      where: { id }, 
+      relations: ['user'],
+      select: {
+        id: true,
+        name: true,
+        user: {
+          id: true,
+          username: true,
+         }
+      }});
   }
 
   async create(userId: number, body: CreateCompanyDto): Promise<Company> {
-    const user = await this.userRepository.findOne({where: {id: userId}});
+    const user = await this.userRepository.findOne({
+      where: 
+      {id: userId},
+      select: ['id', 'username', 'email', 'role'] 
+    });
     if (!user) {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
