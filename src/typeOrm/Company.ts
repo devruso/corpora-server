@@ -15,6 +15,18 @@ export class Company {
   })
   name: string;
 
+  @Column({
+    nullable: false,
+    name: 'phone_number',
+  })
+  phoneNumber: string;
+
+  @Column({
+    nullable: false,
+    unique: true,
+  })
+  cnpj: string;
+
   @ManyToOne(() => User, user => user.companies, {nullable: false})
   user: User;
 }
