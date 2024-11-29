@@ -7,6 +7,7 @@ import { JwtAuthGuard } from './guard/jwt-auth/jwt-auth.guard';
 import { Roles } from './decorators/role.decorator';
 import { Role } from './enums/role.enum';
 import { RolesGuard } from './guard/roles/roles.guard';
+import { CreateUserDto } from 'src/user/dto/create-user';
 
 @Controller('auth')
 export class AuthController {
@@ -47,10 +48,14 @@ export class AuthController {
   }
 
   @UseGuards(GoogleAuthGuard)
+  async validateGoogleUser(googleUser: CreateUserDto){
+    return this.authService.validateGoogleUser(googleUser);
+  }
+
+  @UseGuards(GoogleAuthGuard)
     @Get('google/callback')
     async googleCallback(@Req() req, @Res() res){
       const response = await this.authService.login(req.user.id);
-      res.redirect(`http://localhost:3001?token=${response.accessToken}&refreshToken=${response.refreshToken}`);
+      res.redirect(`http://localhost:3001/google/callback?token=${response.accessToken}`);
     }
-  
 }
